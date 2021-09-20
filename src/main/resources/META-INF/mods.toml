@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[37,)"
+loaderVersion="[36,)"
 license="GPL-3.0-or-later"
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
 
@@ -21,13 +21,6 @@ Inspired by Redstone Arsenal by Team CoFH.
 [[dependencies.energybasedgear]]
     modId="forge"
     mandatory=true
-    versionRange="[37,)"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.energybasedgear]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.17.1,1.18)"
+    versionRange="[36,)"
     ordering="NONE"
     side="BOTH"

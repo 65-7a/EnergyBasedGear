@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "energybasedgear:items/lightning_axe"
+  }
+}
