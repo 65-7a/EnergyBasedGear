@@ -19,36 +19,65 @@ package com.callumwong.energybasedgear.core.event;
 
 import com.callumwong.energybasedgear.Main;
 import com.callumwong.energybasedgear.core.init.ItemInit;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import static com.callumwong.energybasedgear.common.items.LightningAxe.LIGHTNING_IMMUNITY_TAG;
+
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventHandler {
+    @SubscribeEvent
+    public static void onStruckByLightning(EntityStruckByLightningEvent e) {
+        if (e.getEntity() instanceof PlayerEntity) {
+            if (((PlayerEntity) e.getEntity()).isHolding(ItemInit.LIGHTNING_AXE.get())) {
+                ItemStack stack = ((PlayerEntity) e.getEntity()).getMainHandItem();
+                if (stack.hasTag() && stack.getTag().contains(LIGHTNING_IMMUNITY_TAG) && stack.getTag().getBoolean(LIGHTNING_IMMUNITY_TAG)) {
+                    e.setCanceled(true);
+                    stack.getTag().putBoolean(LIGHTNING_IMMUNITY_TAG, false);
+                }
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent e) {
         if (e.getTarget() instanceof LivingEntity) {
             PlayerEntity attacker = e.getPlayer();
 
             if (attacker.level.dimension() == World.OVERWORLD && attacker.isHolding(ItemInit.LIGHTNING_AXE.get())) {
-                if (attacker.getAttackStrengthScale(0) >= 1.0F) {
-                    Entity victim = e.getTarget();
+                attacker.getMainHandItem().getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage -> {
+                    if (energyStorage.getEnergyStored() >= 500 && attacker.getAttackStrengthScale(0) >= 1.0F) {
+                        CompoundNBT nbt = attacker.getMainHandItem().getTag();
 
-                    LightningBoltEntity lightningBoltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, victim.level);
-                    lightningBoltEntity.setPos(victim.getX(), victim.getY(), victim.getZ());
-                    victim.level.addFreshEntity(lightningBoltEntity);
-                    victim.setSecondsOnFire(2);
+                        if (nbt == null) {
+                            nbt = new CompoundNBT();
+                            attacker.getMainHandItem().setTag(nbt);
+                        }
 
-                    attacker.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 100, 0, false, false));
-                }
+                        nbt.putBoolean(LIGHTNING_IMMUNITY_TAG, true); // I want to put some sort of timer here to eventually set this to false.
+
+                        LightningBoltEntity lightningBoltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, e.getTarget().level);
+                        lightningBoltEntity.setPos(e.getTarget().getX(), e.getTarget().getY(), e.getTarget().getZ());
+                        e.getTarget().level.addFreshEntity(lightningBoltEntity);
+                        e.getTarget().setSecondsOnFire(2);
+
+                        energyStorage.extractEnergy(500, false);
+
+                        attacker.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 120, 0, false, false));
+                    }
+                });
             }
         }
     }

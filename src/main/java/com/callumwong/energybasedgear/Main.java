@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(Main.MODID)
 public class Main {
     public static final String MODID = "energybasedgear";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger(MODID);
     public static final ModItemGroup ITEM_GROUP = new ModItemGroup();
 
     public Main() {

@@ -17,13 +17,66 @@
 
 package com.callumwong.energybasedgear.common.items;
 
+import com.callumwong.energybasedgear.common.capabilties.EnergyCapabilityProvider;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.*;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class LightningAxe extends AxeItem {
+    public static final String LIGHTNING_IMMUNITY_TAG = "lightning_immunity";
+
     public LightningAxe(Properties properties) {
         super(ItemTier.DIAMOND, 5.0F, -3.0F, properties);
     }
 
-    // TODO: Use IEnergyStorage capability
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return stack.getCapability(CapabilityEnergy.ENERGY, null).map(energyStorage -> 1 - (double) energyStorage.getEnergyStored() / (double) energyStorage.getMaxEnergyStored()).orElse(0.0);
+    }
+
+    @Override
+    public int getRGBDurabilityForDisplay(ItemStack stack) {
+        return MathHelper.hsvToRgb(1.0F / 3.0F, 1.0F, 1.0F);
+    }
+
+    @Override
+    public boolean isDamageable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public int getDamage(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> text, @Nonnull ITooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, world, text, tooltipFlag);
+        stack.getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage ->
+                text.add(new TranslationTextComponent("tooltip.energybasedgear.energy_stored", energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored())
+                        .setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.GRAY)))));
+    }
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        return new EnergyCapabilityProvider(stack, 100000, 1000);
+    }
 }
