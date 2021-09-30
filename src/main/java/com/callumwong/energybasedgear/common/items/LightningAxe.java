@@ -19,7 +19,6 @@ package com.callumwong.energybasedgear.common.items;
 
 import com.callumwong.energybasedgear.common.capabilties.EnergyCapabilityProvider;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
@@ -34,8 +33,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.callumwong.energybasedgear.core.util.NumberUtils.formatEnergy;
+
 public class LightningAxe extends AxeItem {
-    public static final String LIGHTNING_IMMUNITY_TAG = "lightning_immunity";
+    public static final String LIGHTNING_IMMUNITY_TAG = "LightningImmunityEndTime";
 
     public LightningAxe(Properties properties) {
         super(ItemTier.DIAMOND, 5.0F, -3.0F, properties);
@@ -70,7 +71,7 @@ public class LightningAxe extends AxeItem {
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> text, @Nonnull ITooltipFlag tooltipFlag) {
         super.appendHoverText(stack, world, text, tooltipFlag);
         stack.getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage ->
-                text.add(new TranslationTextComponent("tooltip.energybasedgear.energy_stored", energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored())
+                text.add(new TranslationTextComponent("tooltip.energybasedgear.energy_stored", formatEnergy(energyStorage.getEnergyStored()), formatEnergy(energyStorage.getMaxEnergyStored()))
                         .setStyle(Style.EMPTY.withColor(Color.fromLegacyFormat(TextFormatting.GRAY)))));
     }
 

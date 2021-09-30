@@ -43,9 +43,8 @@ public class EventHandler {
         if (e.getEntity() instanceof PlayerEntity) {
             if (((PlayerEntity) e.getEntity()).isHolding(ItemInit.LIGHTNING_AXE.get())) {
                 ItemStack stack = ((PlayerEntity) e.getEntity()).getMainHandItem();
-                if (stack.hasTag() && stack.getTag().contains(LIGHTNING_IMMUNITY_TAG) && stack.getTag().getBoolean(LIGHTNING_IMMUNITY_TAG)) {
+                if (stack.hasTag() && stack.getTag().contains(LIGHTNING_IMMUNITY_TAG) && stack.getTag().getLong(LIGHTNING_IMMUNITY_TAG) > e.getEntity().level.getGameTime()) {
                     e.setCanceled(true);
-                    stack.getTag().putBoolean(LIGHTNING_IMMUNITY_TAG, false);
                 }
             }
         }
@@ -59,14 +58,8 @@ public class EventHandler {
             if (attacker.level.dimension() == World.OVERWORLD && attacker.isHolding(ItemInit.LIGHTNING_AXE.get())) {
                 attacker.getMainHandItem().getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage -> {
                     if (energyStorage.getEnergyStored() >= 500 && attacker.getAttackStrengthScale(0) >= 1.0F) {
-                        CompoundNBT nbt = attacker.getMainHandItem().getTag();
-
-                        if (nbt == null) {
-                            nbt = new CompoundNBT();
-                            attacker.getMainHandItem().setTag(nbt);
-                        }
-
-                        nbt.putBoolean(LIGHTNING_IMMUNITY_TAG, true); // I want to put some sort of timer here to eventually set this to false.
+                        CompoundNBT nbt = attacker.getMainHandItem().getOrCreateTag();
+                        nbt.putLong(LIGHTNING_IMMUNITY_TAG, e.getTarget().level.getGameTime() + 20L);
 
                         LightningBoltEntity lightningBoltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, e.getTarget().level);
                         lightningBoltEntity.setPos(e.getTarget().getX(), e.getTarget().getY(), e.getTarget().getZ());
