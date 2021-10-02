@@ -23,11 +23,14 @@ import net.minecraft.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 public class ModItemGroup extends ItemGroup {
     public ModItemGroup() {
         super("energyBasedGear");
     }
 
+    @Nonnull
     @OnlyIn(Dist.CLIENT)
     @Override
     public ItemStack makeIcon() {

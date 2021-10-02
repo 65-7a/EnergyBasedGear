@@ -20,6 +20,7 @@ package com.callumwong.energybasedgear.core.init;
 import com.callumwong.energybasedgear.Main;
 import com.callumwong.energybasedgear.common.items.LightningAxe;
 import net.minecraft.item.Item;
+import net.minecraft.item.Rarity;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,5 +29,5 @@ public class ItemInit {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MODID);
 
     public static final RegistryObject<Item> LIGHTNING_AXE = ITEMS.register("lightning_axe",
-            () -> new LightningAxe(new Item.Properties().tab(Main.ITEM_GROUP)));
+            () -> new LightningAxe(new Item.Properties().tab(Main.ITEM_GROUP).rarity(Rarity.UNCOMMON)));
 }
