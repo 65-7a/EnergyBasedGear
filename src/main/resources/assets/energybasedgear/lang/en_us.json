@@ -1,5 +1,6 @@
 {
   "itemGroup.energyBasedGear": "Energy-Based Gear",
+  "tooltip.energybasedgear.energy_stored": "Energy: %s/%s",
   "item.energybasedgear.lightning_axe": "Lightning Axe",
-  "tooltip.energybasedgear.energy_stored": "Energy: %s/%s"
+  "item.energybasedgear.charger": "Charger"
 }

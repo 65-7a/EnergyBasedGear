@@ -56,6 +56,15 @@ public interface IEnergyItem extends IForgeItem {
     @Nullable
     @Override
     default ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new EnergyCapabilityProvider(stack, 100000, 1000);
+        return new EnergyCapabilityProvider(stack, getCapacity(), getTransferRate());
+    }
+
+    int getCapacity();
+    int getTransferRate();
+
+    @Override
+    default int getItemStackLimit(ItemStack stack) {
+//        return stack.getCapability(CapabilityEnergy.ENERGY).map(iEnergyStorage -> iEnergyStorage.getEnergyStored() != 0 ? 1 : getStackSize()).orElse(getStackSize());
+        return 1;
     }
 }

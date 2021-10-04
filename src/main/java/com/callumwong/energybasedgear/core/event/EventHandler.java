@@ -18,6 +18,7 @@
 package com.callumwong.energybasedgear.core.event;
 
 import com.callumwong.energybasedgear.Main;
+import com.callumwong.energybasedgear.common.config.Config;
 import com.callumwong.energybasedgear.core.init.ItemInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +35,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.callumwong.energybasedgear.common.items.LightningAxe.LIGHTNING_IMMUNITY_TAG;
+import static com.callumwong.energybasedgear.common.items.impl.LightningAxe.LIGHTNING_IMMUNITY_TAG;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventHandler {
@@ -52,23 +53,26 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent e) {
+        if (!e.getTarget().isAlive()) return;
         if (e.getTarget() instanceof LivingEntity) {
             PlayerEntity attacker = e.getPlayer();
 
             if (attacker.level.dimension() == World.OVERWORLD && attacker.isHolding(ItemInit.LIGHTNING_AXE.get())) {
                 attacker.getMainHandItem().getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage -> {
-                    if (energyStorage.getEnergyStored() >= 500 && attacker.getAttackStrengthScale(0) >= 1.0F) {
-                        CompoundNBT nbt = attacker.getMainHandItem().getOrCreateTag();
-                        nbt.putLong(LIGHTNING_IMMUNITY_TAG, e.getTarget().level.getGameTime() + 20L);
+                    if (attacker.getAttackStrengthScale(0) >= 1.0F || !Config.LIGHTNING_AXE_COOLDOWN.get()) {
+                        if (energyStorage.getEnergyStored() >= 500) {
+                            CompoundNBT nbt = attacker.getMainHandItem().getOrCreateTag();
+                            nbt.putLong(LIGHTNING_IMMUNITY_TAG, e.getTarget().level.getGameTime() + 20L);
 
-                        LightningBoltEntity lightningBoltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, e.getTarget().level);
-                        lightningBoltEntity.setPos(e.getTarget().getX(), e.getTarget().getY(), e.getTarget().getZ());
-                        e.getTarget().level.addFreshEntity(lightningBoltEntity);
-                        e.getTarget().setSecondsOnFire(2);
+                            LightningBoltEntity lightningBoltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, e.getTarget().level);
+                            lightningBoltEntity.setPos(e.getTarget().getX(), e.getTarget().getY(), e.getTarget().getZ());
+                            e.getTarget().level.addFreshEntity(lightningBoltEntity);
+                            e.getTarget().setSecondsOnFire(2);
 
-                        energyStorage.extractEnergy(500, false);
+                            energyStorage.extractEnergy(500, false);
 
-                        attacker.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 120, 0, false, false));
+                            attacker.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 120, 0, false, false));
+                        }
                     }
                 });
             }

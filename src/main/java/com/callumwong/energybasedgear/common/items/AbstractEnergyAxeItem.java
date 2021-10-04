@@ -19,8 +19,8 @@ package com.callumwong.energybasedgear.common.items;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -31,11 +31,9 @@ import java.util.List;
 
 import static com.callumwong.energybasedgear.core.util.NumberUtils.formatEnergy;
 
-public class LightningAxe extends AxeItem implements IEnergyItem {
-    public static final String LIGHTNING_IMMUNITY_TAG = "LightningImmunityEndTime";
-
-    public LightningAxe(Properties properties) {
-        super(ItemTier.DIAMOND, 5.0F, -3.0F, properties);
+public abstract class AbstractEnergyAxeItem extends AxeItem implements IEnergyItem {
+    public AbstractEnergyAxeItem(IItemTier tier, float damage, float speed, Properties properties) {
+        super(tier, damage, speed, properties);
     }
 
     @Override
