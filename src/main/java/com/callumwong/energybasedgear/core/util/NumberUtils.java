@@ -17,7 +17,7 @@
 
 package com.callumwong.energybasedgear.core.util;
 
-import com.callumwong.energybasedgear.common.config.Config;
+import com.callumwong.energybasedgear.common.config.ClientConfig;
 
 import java.util.Map;
 import java.util.NavigableMap;
@@ -36,7 +36,7 @@ public class NumberUtils {
     }
 
     public static String formatEnergy(long value) {
-        if (!Config.FORMAT_FE_VALUES.get()) return value + " FE";
+        if (!ClientConfig.FORMAT_FE_VALUES.get()) return value + " FE";
 
         // Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
         if (value == Long.MIN_VALUE) return formatEnergy(Long.MIN_VALUE + 1);

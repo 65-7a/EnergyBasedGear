@@ -10,7 +10,7 @@ displayName="Energy-Based Gear"
 #updateJSONURL="https://change.me.example.invalid/updates.json"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
 #logoFile="logo.png"
-credits="The Forge and FML guys"
+credits="Hobbeswyn for the Lightning Axe model"
 authors="65_7a"
 description='''
 Energy-Based Gear is a content mod which adds weapons, tools and armour that makes use of the Forge Energy API.

@@ -32,8 +32,8 @@ import java.util.List;
 import static com.callumwong.energybasedgear.core.util.NumberUtils.formatEnergy;
 
 public abstract class AbstractEnergyAxeItem extends AxeItem implements IEnergyItem {
-    public AbstractEnergyAxeItem(IItemTier tier, float damage, float speed, Properties properties) {
-        super(tier, damage, speed, properties);
+    public AbstractEnergyAxeItem(IItemTier tier, float attackDamage, float attackSpeed, Properties properties) {
+        super(tier, attackDamage, attackSpeed, properties);
     }
 
     @Override

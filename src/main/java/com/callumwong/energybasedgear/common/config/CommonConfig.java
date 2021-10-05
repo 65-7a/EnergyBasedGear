@@ -19,19 +19,17 @@ package com.callumwong.energybasedgear.common.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class Config {
+public class CommonConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> FORMAT_FE_VALUES;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LIGHTNING_AXE_COOLDOWN;
 
     static {
-        BUILDER.push("Configuration for Energy-Based Gear");
+        BUILDER.comment("This is the common configuration for Energy-Based Gear. The config is stored on both the client and the server.");
 
-        FORMAT_FE_VALUES = BUILDER.comment("Shorten large FE values, e.g. 2000 FE = 2 kFE.").define("Format FE Values", true);
+        BUILDER.push("items");
         LIGHTNING_AXE_COOLDOWN = BUILDER.comment("Whether to use the attack cooldown for the Lightning Axe.").define("Lightning Axe Cooldown", true);
-
         BUILDER.pop();
 
         SPEC = BUILDER.build();

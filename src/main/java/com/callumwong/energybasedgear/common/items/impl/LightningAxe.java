@@ -18,7 +18,10 @@
 package com.callumwong.energybasedgear.common.items.impl;
 
 import com.callumwong.energybasedgear.common.items.AbstractEnergyAxeItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+
+import javax.annotation.Nonnull;
 
 public class LightningAxe extends AbstractEnergyAxeItem {
     public static final String LIGHTNING_IMMUNITY_TAG = "LightningImmunityEndTime";
@@ -37,5 +40,9 @@ public class LightningAxe extends AbstractEnergyAxeItem {
         return 1000;
     }
 
-    // TODO: Create lightning effect after hitting entity
+    @Override
+    public boolean isFoil(@Nonnull ItemStack stack) {
+        // To deal with spazzy enchantment looks, we get rid of the glint completely
+        return false;
+    }
 }

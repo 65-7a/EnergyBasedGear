@@ -1,6 +1,7 @@
 package com.callumwong.energybasedgear;
 
-import com.callumwong.energybasedgear.common.config.Config;
+import com.callumwong.energybasedgear.common.config.ClientConfig;
+import com.callumwong.energybasedgear.common.config.CommonConfig;
 import com.callumwong.energybasedgear.core.ModItemGroup;
 import com.callumwong.energybasedgear.core.init.ItemInit;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,7 +26,8 @@ public class Main {
 
         ItemInit.ITEMS.register(bus);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "energybasedgear-config.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "EnergyBasedGear-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "EnergyBasedGear-client.toml");
     }
 
     private void setup(final FMLCommonSetupEvent event) {
