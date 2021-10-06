@@ -17,12 +17,29 @@
 
 package com.callumwong.energybasedgear.common.items.impl;
 
+import com.callumwong.energybasedgear.Main;
+import com.callumwong.energybasedgear.common.config.CommonConfig;
 import com.callumwong.energybasedgear.common.items.AbstractEnergyAxeItem;
+import com.callumwong.energybasedgear.core.init.ItemInit;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 
+@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class LightningAxe extends AbstractEnergyAxeItem {
     public static final String LIGHTNING_IMMUNITY_TAG = "LightningImmunityEndTime";
 
@@ -44,5 +61,45 @@ public class LightningAxe extends AbstractEnergyAxeItem {
     public boolean isFoil(@Nonnull ItemStack stack) {
         // To deal with spazzy enchantment looks, we get rid of the glint completely
         return false;
+    }
+
+    @SubscribeEvent
+    public static void onStruckByLightning(EntityStruckByLightningEvent e) {
+        if (e.getEntity() instanceof PlayerEntity) {
+            if (((PlayerEntity) e.getEntity()).isHolding(ItemInit.LIGHTNING_AXE.get())) {
+                ItemStack stack = ((PlayerEntity) e.getEntity()).getMainHandItem();
+                if (stack.hasTag() && stack.getTag().contains(LIGHTNING_IMMUNITY_TAG) && stack.getTag().getLong(LIGHTNING_IMMUNITY_TAG) > e.getEntity().level.getGameTime()) {
+                    e.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onAttackEntity(AttackEntityEvent e) {
+        if (!e.getTarget().isAlive()) return;
+        if (e.getTarget() instanceof LivingEntity) {
+            PlayerEntity attacker = e.getPlayer();
+
+            if (attacker.level.dimension() == World.OVERWORLD && attacker.isHolding(ItemInit.LIGHTNING_AXE.get())) {
+                attacker.getMainHandItem().getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage -> {
+                    if (attacker.getAttackStrengthScale(0) >= 1.0F || !CommonConfig.LIGHTNING_AXE_COOLDOWN.get()) {
+                        if (energyStorage.getEnergyStored() >= 500) {
+                            CompoundNBT nbt = attacker.getMainHandItem().getOrCreateTag();
+                            nbt.putLong(LIGHTNING_IMMUNITY_TAG, e.getTarget().level.getGameTime() + 20L);
+
+                            LightningBoltEntity lightningBoltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, e.getTarget().level);
+                            lightningBoltEntity.setPos(e.getTarget().getX(), e.getTarget().getY(), e.getTarget().getZ());
+                            e.getTarget().level.addFreshEntity(lightningBoltEntity);
+                            e.getTarget().setSecondsOnFire(2);
+
+                            energyStorage.extractEnergy(500, false);
+
+                            attacker.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 120, 0, false, false));
+                        }
+                    }
+                });
+            }
+        }
     }
 }
