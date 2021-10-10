@@ -1,0 +1,7 @@
+{
+  "name": "Energy-Based Gear",
+  "landing_text": "Welcome to Energy-Based Gear.",
+  "version": 1,
+  "book_texture": "patchouli:textures/gui/book_red.png",
+  "model": "energybasedgear:guide_book"
+}

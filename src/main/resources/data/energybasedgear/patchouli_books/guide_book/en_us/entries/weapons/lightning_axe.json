@@ -1,0 +1,19 @@
+{
+  "name": "Lightning Axe",
+  "icon": "energybasedgear:lightning_axe",
+  "category": "energybasedgear:weapons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Call upon the power of Zeus, and strike down your foes with lightning that will shatter them into pieces.$(br2)The model for this item was created by $(l:https://www.planetminecraft.com/member/hobbeswyn/)Hobbeswyn$(/l) on $(t:Planet Minecraft)PMC$(). Check it out $(l:https://www.planetminecraft.com/texture-pack/kold-battle-axe/)here$(/l)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The target will not be struck by lightning if the attack cooldown is active (can be disabled in configuration).$(br2)Striking a target with lightning will cost $(5)1000 $(t:Forge Energy)FE$(). The axe can hold a maximum of $(5)200 k$(t:Forge Energy)FE$().$(br2)On attack, the wielder will be given 6 seconds of fire resistance and 1 second of lightning immunity."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "energybasedgear:lightning_axe"
+    }
+  ]
+}

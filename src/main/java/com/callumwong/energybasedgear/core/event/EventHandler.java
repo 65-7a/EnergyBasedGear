@@ -15,22 +15,12 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.callumwong.energybasedgear.core;
+package com.callumwong.energybasedgear.core.event;
 
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import com.callumwong.energybasedgear.Main;
+import net.minecraftforge.fml.common.Mod;
 
-public class ModCreativeModeTab extends CreativeModeTab {
-    public ModCreativeModeTab() {
-        super("energyBasedGear");
-    }
+@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class EventHandler {
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public ItemStack makeIcon() {
-        return Items.REDSTONE_BLOCK.getDefaultInstance();
-    }
 }
