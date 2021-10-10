@@ -2,7 +2,7 @@ package com.callumwong.energybasedgear;
 
 import com.callumwong.energybasedgear.common.config.ClientConfig;
 import com.callumwong.energybasedgear.common.config.CommonConfig;
-import com.callumwong.energybasedgear.core.ModItemGroup;
+import com.callumwong.energybasedgear.core.util.EnergyBasedGearItemGroup;
 import com.callumwong.energybasedgear.core.init.ItemInit;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 public class Main {
     public static final String MODID = "energybasedgear";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
-    public static final ModItemGroup ITEM_GROUP = new ModItemGroup();
+    public static final EnergyBasedGearItemGroup ITEM_GROUP = new EnergyBasedGearItemGroup();
 
     public Main() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

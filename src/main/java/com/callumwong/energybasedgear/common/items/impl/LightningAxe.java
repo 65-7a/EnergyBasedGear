@@ -42,6 +42,7 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class LightningAxe extends AbstractEnergyAxeItem {
     public static final String LIGHTNING_IMMUNITY_TAG = "LightningImmunityEndTime";
+    public static final int LIGHTNING_ENERGY_USAGE = 1000;
 
     public LightningAxe(Properties properties) {
         super(ItemTier.DIAMOND, 5.0F, -3.0F, properties);
@@ -49,7 +50,7 @@ public class LightningAxe extends AbstractEnergyAxeItem {
 
     @Override
     public int getCapacity() {
-        return 100000;
+        return 200000;
     }
 
     @Override
@@ -84,7 +85,7 @@ public class LightningAxe extends AbstractEnergyAxeItem {
             if (attacker.level.dimension() == World.OVERWORLD && attacker.isHolding(ItemInit.LIGHTNING_AXE.get())) {
                 attacker.getMainHandItem().getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage -> {
                     if (attacker.getAttackStrengthScale(0) >= 1.0F || !CommonConfig.LIGHTNING_AXE_COOLDOWN.get()) {
-                        if (energyStorage.getEnergyStored() >= 500) {
+                        if (energyStorage.getEnergyStored() >= LIGHTNING_ENERGY_USAGE) {
                             CompoundNBT nbt = attacker.getMainHandItem().getOrCreateTag();
                             nbt.putLong(LIGHTNING_IMMUNITY_TAG, e.getTarget().level.getGameTime() + 20L);
 
@@ -93,7 +94,7 @@ public class LightningAxe extends AbstractEnergyAxeItem {
                             e.getTarget().level.addFreshEntity(lightningBoltEntity);
                             e.getTarget().setSecondsOnFire(2);
 
-                            energyStorage.extractEnergy(500, false);
+                            energyStorage.extractEnergy(LIGHTNING_ENERGY_USAGE, false);
 
                             attacker.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 120, 0, false, false));
                         }

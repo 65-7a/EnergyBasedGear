@@ -1,0 +1,15 @@
+{
+  "name": "Battery",
+  "icon": "energybasedgear:battery",
+  "category": "energybasedgear:misc",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "It's a battery. It is used to store energy and is also used as a crafting material.$(br2)Capacity: $(5)100 k$(t:Forge Energy)FE$()$(br)Transfer Rate: $(5)1 k$(t:Forge Energy per tick)FE/t"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "energybasedgear:battery"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "energybasedgear:items/charger"
+    "layer0": "energybasedgear:items/guide_book"
   }
 }

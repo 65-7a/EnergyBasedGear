@@ -1,26 +1,38 @@
-modLoader="javafml"
-loaderVersion="[36,)"
-license="GPL-3.0-or-later"
+modLoader = "javafml"
+loaderVersion = "[36,)"
+license = "GPL-3.0-or-later"
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
 
 [[mods]]
-modId="energybasedgear"
-version="${file.jarVersion}"
-displayName="Energy-Based Gear"
+modId = "energybasedgear"
+version = "${file.jarVersion}"
+displayName = "Energy-Based Gear"
 #updateJSONURL="https://change.me.example.invalid/updates.json"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
 #logoFile="logo.png"
-credits="Hobbeswyn for the Lightning Axe model"
-authors="65_7a"
-description='''
+credits = "Hobbeswyn for the Lightning Axe model"
+authors = "65_7a"
+description = '''
 Energy-Based Gear is a content mod which adds weapons, tools and armour that makes use of the Forge Energy API.
 
 Inspired by Redstone Arsenal by Team CoFH.
 '''
 
 [[dependencies.energybasedgear]]
-    modId="forge"
-    mandatory=true
-    versionRange="[36,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "forge"
+mandatory = true
+versionRange = "[36,)"
+side = "BOTH"
+
+[[dependencies.energybasedgear]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5]"
+side = "BOTH"
+
+[[dependencies.energybasedgear]]
+modId = "mekanism"
+mandatory = true
+versionRange = "[1.16.5-10.0.21,)"
+ordering = "AFTER"
+side = "BOTH"
