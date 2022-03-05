@@ -54,6 +54,4 @@ public class Battery extends AbstractEnergyItem {
 //            });
 //        }
 //    }
-//
-//    Charges all items in inventory. Unwanted behaviour but I don't wanna rewrite it so I'm keeping it.
 }

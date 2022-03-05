@@ -34,37 +34,35 @@ public class ItemEnergyStorage extends EnergyStorage {
         super(capacity, maxTransfer, maxTransfer);
 
         this.stack = stack;
-        this.energy = stack.hasTag() && stack.getTag().contains(NBT_ENERGY) ? stack.getTag().getInt(NBT_ENERGY) : 0;
+        this.energy = stack.hasTag() && stack.getTag() != null && stack.getTag().contains(NBT_ENERGY)
+            ? stack.getTag().getInt(NBT_ENERGY)
+            : 0;
     }
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int received = super.receiveEnergy(maxReceive, simulate);
-
-        if (received > 0 && !simulate) {
-            if (!stack.hasTag()) {
-                stack.setTag(new CompoundNBT());
-            }
-
-            assert stack.getTag() != null;
-            stack.getTag().putInt(NBT_ENERGY, getEnergyStored());
-        }
-
-        return received;
+    
+        return setEnergy(simulate, received);
     }
-
+    
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
         int extracted = super.extractEnergy(maxExtract, simulate);
-
-        if (extracted > 0 && !simulate) {
+        
+        return setEnergy(simulate, extracted);
+    }
+    
+    private int setEnergy(boolean simulate, int energy) {
+        if (energy > 0 && !simulate) {
             if (!stack.hasTag()) {
                 stack.setTag(new CompoundNBT());
             }
-
+    
+            assert stack.getTag() != null;
             stack.getTag().putInt(NBT_ENERGY, getEnergyStored());
         }
-
-        return extracted;
+        
+        return energy;
     }
 }
